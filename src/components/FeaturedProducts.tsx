@@ -43,27 +43,15 @@ export default async function FeaturedProducts({
         </p>
       </div>
 
-      <div className="relative">
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative">
-          {produtsData?.map((product, index) => (
-            <div
-              key={product.id}
-              className="relative group hover:-translate-y-1 transition-transform duration-300"
-            >
-              <ProductCard product={product} showPrice={showPrice} />
-            </div>
-          ))}
-        </div>
-
-        {/* 装饰性元素 - 使用固定位置替代随机位置 */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute w-2 h-2 rounded-full bg-blue-400/20 top-[20%] left-[15%] animate-pulse" />
-          <div className="absolute w-2 h-2 rounded-full bg-blue-400/20 top-[65%] left-[25%] animate-pulse delay-75" />
-          <div className="absolute w-2 h-2 rounded-full bg-blue-400/20 top-[40%] left-[75%] animate-pulse delay-100" />
-          <div className="absolute w-2 h-2 rounded-full bg-blue-400/20 top-[80%] left-[85%] animate-pulse delay-150" />
-          <div className="absolute w-2 h-2 rounded-full bg-blue-400/20 top-[30%] left-[45%] animate-pulse delay-200" />
-          <div className="absolute w-2 h-2 rounded-full bg-blue-400/20 top-[70%] left-[65%] animate-pulse delay-300" />
-        </div>
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 relative">
+        {produtsData?.map((product, index) => (
+          <div
+            key={product.id}
+            className="relative group hover:-translate-y-1 transition-transform duration-300"
+          >
+            <ProductCard product={product} showPrice={showPrice} />
+          </div>
+        ))}
       </div>
     </section>
   );
