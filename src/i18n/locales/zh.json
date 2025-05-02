@@ -1,0 +1,178 @@
+{
+  "common": {
+    "cart": "购物车",
+    "categories": "分类",
+    "products": "产品",
+    "addToCart": "加入购物车",
+    "price": "¥{price}",
+    "search": "搜索",
+    "menu": "菜单",
+    "moreImages": "更多图片",
+    "relatedProducts": "相关产品",
+    "inStock": "有货",
+    "quantity": "数量",
+    "buyNow": "立即购买",
+    "features": "产品特点",
+    "specifications": "技术规格",
+    "home": "首页",
+    "about": "关于我们",
+    "news": "新闻",
+    "specials": "特价商品",
+    "address": "广东省佛山市顺德区北滘镇, 慧聪城2座415顺德, GUANGDONG 528000CN"
+  },
+  "metadata": {
+    "title": "成益 - 领先的自动化设备与半导体设备销售解决方案",
+    "description": "成益提供高品质自动化设备、半导体设备销售及技术支持，服务于制造业、科技行业，包括工业机器人、芯片制造设备及智能制造解决方案。",
+    "keywords": "成益, 自动化设备, 半导体设备, 设备销售, 工业自动化, 半导体解决方案, 自动化系统, 工业机器人设备, 智能制造设备, 芯片制造设备, 自动化设备价格, 半导体设备供应商, 全世界自动化设备, 广东半导体销售, 成益自动化解决方案",
+    "openGraph": {
+      "title": "成益 - 自动化与半导体设备专家",
+      "description": "探索成益提供的自动化设备和半导体设备，助力制造业和科技行业实现创新与高效，包括工业机器人和芯片制造解决方案。"
+    }
+  },
+  "whyChooseUs": {
+    "title": "为什么选择我们",
+    "subtitle": "我们提供最优质的服务和最高品质的电子元器件",
+    "shipping": {
+      "title": "全球快速配送",
+      "description": "快速将元器件配送到世界各地"
+    },
+    "quality": {
+      "title": "品质保证",
+      "description": "所有元器件经过测试和真实性验证"
+    },
+    "support": {
+      "title": "专业支持",
+      "description": "获得我们经验丰富的团队的技术支持"
+    },
+    "security": {
+      "title": "安全支付",
+      "description": "使用我们安全的支付系统，让您购物更放心"
+    }
+  },
+  "culture": {
+    "title": "企业文化",
+    "subtitle": "以创新驱动发展，以服务创造价值，打造行业标杆",
+    "mission": {
+      "title": "企业使命",
+      "content": "致力于成为半导体设备领域最值得信赖的合作伙伴"
+    },
+    "vision": {
+      "title": "企业愿景",
+      "content": "引领行业发展，推动技术创新，实现共同繁荣"
+    },
+    "values": {
+      "title": "核心价值观",
+      "content": "诚信、专业、创新、共赢"
+    },
+    "inheritance": {
+      "title": "传承匠心",
+      "subtitle": "十年专注，只为精益求精",
+      "description": "作为行业领先的半导体设备服务商，我们始终秉持工匠精神，在设备选型、技术支持、售后服务等每一个环节都精益求精。通过持续不断的技术积累和服务创新，为客户提供最优质的产品和服务。",
+      "points": [
+        "专业技术团队提供全方位支持",
+        "完善的质量管理体系",
+        "严格的供应商筛选标准",
+        "规范的服务流程管理"
+      ]
+    },
+    "cooperation": {
+      "title": "合作共赢",
+      "subtitle": "携手共创，互利共生",
+      "description": "我们深知，企业的发展离不开合作伙伴的支持与信任。秉持'诚信为本、互利共赢'的理念，我们致力于与供应商、客户建立长期稳定的战略合作关系。",
+      "points": [
+        "建立战略合作伙伴关系",
+        "定期开展技术交流活动",
+        "搭建行业资源共享平台",
+        "创造多方共赢的商业模式"
+      ]
+    },
+    "innovation": {
+      "title": "开拓创新",
+      "subtitle": "突破界限，引领未来",
+      "description": "创新是企业发展的不竭动力。我们持续关注行业前沿技术，投入大量资源进行技术研发和服务创新。通过建立完善的创新机制，鼓励员工大胆探索、勇于尝试。",
+      "points": [
+        "持续跟踪行业前沿技术",
+        "建立创新激励机制",
+        "打造学习型组织",
+        "推动服务模式创新"
+      ]
+    },
+    "cta": {
+      "title": "加入我们，共创未来",
+      "subtitle": "我们期待与优秀的你一起，在半导体设备领域续写新的篇章",
+      "button": "了解更多机会"
+    },
+    "learnMore": "了解更多"
+  },
+  "home": {
+    "hero": {
+      "title": "专业电子元器件",
+      "subtitle": "为您的电子项目提供高品质元器件，专业技术支持和快速的全球配送",
+      "exploreButton": "浏览产品",
+      "categoriesButton": "查看分类",
+      "featuredAlt": "精选产品",
+      "backgroundAlt": "电子元器件"
+    },
+    "categories": {
+      "title": "浏览分类",
+      "subtitle": "探索我们丰富的电子元件"
+    },
+    "featured": {
+      "title": "精选产品",
+      "subtitle": "发现最受欢迎的元件",
+      "specielTitle": "特价产品",
+      "specielSubtitle": "最受欢迎的特价元件"
+    }
+  },
+  "newsletter": {
+    "title": "订阅我们的通讯",
+    "subtitle": "及时了解最新产品和优惠信息",
+    "placeholder": "输入您的邮箱",
+    "button": "订阅",
+    "success": "感谢您的订阅！"
+  },
+  "cart": {
+    "inquiry": "产品询价",
+    "title": "购物车",
+    "emptyCart": "购物车是空的",
+    "emptyCartMessage": "看起来您还没有添加任何商品",
+    "continueShopping": "继续购物",
+    "quantity": "数量",
+    "orderSummary": "订单摘要",
+    "subtotal": "小计",
+    "shipping": "运费",
+    "free": "免费",
+    "total": "总计",
+    "checkout": "结算"
+  },
+  "inquiryDialog": {
+    "title": "产品咨询",
+    "description": "填写您的联系方式，我们将尽快与您联系",
+    "selectedProducts": "已选产品",
+    "noProducts": "暂无选择产品",
+    "quantity": "数量",
+    "submitInquiry": "提交咨询",
+    "formFields": {
+      "name": {
+        "label": "姓名",
+        "placeholder": "请输入您的姓名"
+      },
+      "email": {
+        "label": "邮箱",
+        "placeholder": "请输入您的邮箱"
+      },
+      "phone": {
+        "label": "电话",
+        "placeholder": "请输入您的电话号码"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "placeholder": "请输入您的WhatsApp号码"
+      },
+      "message": {
+        "label": "附加消息",
+        "placeholder": "请输入您的额外咨询信息"
+      }
+    }
+  }
+} 

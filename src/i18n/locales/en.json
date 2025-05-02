@@ -1,0 +1,178 @@
+{
+  "common": {
+    "cart": "Cart",
+    "categories": "Categories",
+    "products": "Products",
+    "addToCart": "Add to Cart",
+    "price": "${price}",
+    "search": "Search",
+    "menu": "Menu",
+    "moreImages": "More Images",
+    "relatedProducts": "Related Products",
+    "inStock": "In Stock",
+    "quantity": "Quantity",
+    "buyNow": "Buy Now",
+    "features": "Features",
+    "specifications": "Specifications",
+    "home": "Home",
+    "about": "about us",
+    "news": "News",
+    "specials": "Specials",
+    "address": "Room 415, Building 2, Hui Cong Cheng​ Beijiao Town, Shunde District Foshan City, Guangdong Province 528000 China"
+  },
+  "metadata": {
+    "title": "Chengyi - Leading Automation & Semiconductor Equipment Solutions",
+    "description": "Chengyi provides high-quality automation equipment, semiconductor device sales, and technical support, serving manufacturing and tech industries with industrial robots, chip manufacturing equipment, and intelligent manufacturing solutions.",
+    "keywords": "Chengyi, automation equipment, semiconductor equipment, equipment sales, industrial automation, semiconductor solutions, automation systems, industrial robotics, smart manufacturing devices, chip manufacturing equipment, automation equipment pricing, global semiconductor suppliers, Guangdong semiconductor sales, Chengyi automation solutions",
+    "openGraph": {
+      "title": "Chengyi - Experts in Automation & Semiconductor Equipment",
+      "description": "Explore Chengyi automation and semiconductor equipment, empowering innovation and efficiency in manufacturing and tech industries through industrial robots and chip manufacturing solutions."
+    }
+  },
+  "whyChooseUs": {
+    "title": "Why Choose Us",
+    "subtitle": "We provide the best service and highest quality electronic components",
+    "shipping": {
+      "title": "Fast Worldwide Shipping",
+      "description": "Get your components delivered quickly anywhere in the world"
+    },
+    "quality": {
+      "title": "Quality Guaranteed",
+      "description": "All components are tested and verified for authenticity"
+    },
+    "support": {
+      "title": "Expert Support",
+      "description": "Get technical assistance from our experienced team"
+    },
+    "security": {
+      "title": "Secure Payments",
+      "description": "Shop with confidence using our secure payment system"
+    }
+  },
+  "culture": {
+    "title": "Corporate Culture",
+    "subtitle": "Drive development through innovation, create value through service, and set industry benchmarks",
+    "mission": {
+      "title": "Mission",
+      "content": "To become the most trusted partner in the semiconductor equipment industry"
+    },
+    "vision": {
+      "title": "Vision",
+      "content": "Lead industry development, promote technological innovation, and achieve common prosperity"
+    },
+    "values": {
+      "title": "Core Values",
+      "content": "Integrity, Professionalism, Innovation, Win-win"
+    },
+    "inheritance": {
+      "title": "Heritage of Craftsmanship",
+      "subtitle": "Ten years of focus for excellence",
+      "description": "As a leading semiconductor equipment service provider, we always uphold the spirit of craftsmanship, pursuing excellence in every aspect from equipment selection to technical support and after-sales service.",
+      "points": [
+        "Comprehensive support from professional technical team",
+        "Complete quality management system",
+        "Strict supplier selection criteria",
+        "Standardized service process management"
+      ]
+    },
+    "cooperation": {
+      "title": "Win-win Cooperation",
+      "subtitle": "Create together, benefit together",
+      "description": "We understand that enterprise development relies on the support and trust of partners. Adhering to the principle of 'integrity and mutual benefit', we are committed to establishing long-term strategic partnerships.",
+      "points": [
+        "Establish strategic partnerships",
+        "Regular technical exchange activities",
+        "Build industry resource sharing platform",
+        "Create win-win business models"
+      ]
+    },
+    "innovation": {
+      "title": "Pioneer Innovation",
+      "subtitle": "Break boundaries, lead the future",
+      "description": "Innovation is the inexhaustible driving force for enterprise development. We continuously focus on cutting-edge industry technologies and invest substantial resources in technical R&D and service innovation.",
+      "points": [
+        "Track industry-leading technologies",
+        "Establish innovation incentive mechanism",
+        "Build a learning organization",
+        "Promote service model innovation"
+      ]
+    },
+    "cta": {
+      "title": "Join Us, Create the Future Together",
+      "subtitle": "We look forward to working with talented individuals like you to write new chapters in the semiconductor equipment industry",
+      "button": "Learn More"
+    },
+    "learnMore": "Learn More"
+  },
+  "home": {
+    "hero": {
+      "title": "Professional Electronic Components",
+      "subtitle": "High-quality components for your electronic projects, backed by expert support and fast worldwide shipping",
+      "exploreButton": "Explore Products",
+      "categoriesButton": "View Categories",
+      "featuredAlt": "Featured Product",
+      "backgroundAlt": "Electronic components"
+    },
+    "categories": {
+      "title": "Browse Categories",
+      "subtitle": "Explore our wide range of electronic components"
+    },
+    "featured": {
+      "title": "Featured Products",
+      "subtitle": "Discover our most popular components",
+      "specielTitle": "Special",
+      "specielSubtitle": "Most Popular Special Offer Products"
+    }
+  },
+  "newsletter": {
+    "title": "Subscribe to Our Newsletter",
+    "subtitle": "Stay updated with our latest products and offers",
+    "placeholder": "Enter your email",
+    "button": "Subscribe",
+    "success": "Thank you for subscribing!"
+  },
+  "cart": {
+    "inquiry": "Product Inquiry",
+    "title": "Shopping Cart",
+    "emptyCart": "Your cart is empty",
+    "emptyCartMessage": "Looks like you haven't added any items to your cart yet",
+    "continueShopping": "Continue Shopping",
+    "quantity": "Quantity",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "checkout": "Proceed to Checkout"
+  },
+  "inquiryDialog": {
+    "title": "Product Inquiry",
+    "description": "Please fill in your contact information, and we will get back to you as soon as possible",
+    "selectedProducts": "Selected Products",
+    "noProducts": "No products selected",
+    "quantity": "Quantity",
+    "submitInquiry": "Submit Inquiry",
+    "formFields": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Please enter your name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Please enter your email"
+      },
+      "phone": {
+        "label": "Phone",
+        "placeholder": "Please enter your phone number"
+      },
+      "whatsapp": {
+        "label": "WhatsApp",
+        "placeholder": "Please enter your WhatsApp number"
+      },
+      "message": {
+        "label": "Additional Message",
+        "placeholder": "Please enter any additional consultation information"
+      }
+    }
+  }
+} 

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas 海量表格虚拟滚动示例</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+        .table-container {
+            width: 80vw; /* 容器宽度 */
+            height: 70vh; /* 容器高度 */
+            border: 1px solid #ccc;
+            overflow: scroll; /* 使容器出现滚动条 */
+            position: relative; /* 用于内部绝对定位 */
+        }
+        #table-canvas {
+            display: block; /* 消除 canvas 底部空隙 */
+            /* Canvas 尺寸会在 JS 中根据容器设置 */
+        }
+        /* 添加一个覆盖层来显示总内容尺寸，驱动滚动条 */
+        .scroll-sizer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px; /* 会在 JS 中设置 */
+            height: 1px; /* 会在 JS 中设置 */
+            visibility: hidden; /* 不可见，只用于撑开滚动条 */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Canvas 海量表格虚拟滚动</h1>
+<p>尝试滚动下面的表格区域。</p>
+
+<div id="table-container" class="table-container">
+    <canvas id="table-canvas"></canvas>
+    <div class="scroll-sizer"></div>
+</div>
+
+<script>
+class VirtualTable {
+    constructor(containerId, canvasId, options = {}) {
+        this.container = document.getElementById(containerId);
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.sizer = this.container.querySelector('.scroll-sizer');
+
+        if (!this.container || !this.canvas || !this.ctx || !this.sizer) {
+            console.error("Initialization failed: Container, Canvas, or Sizer not found.");
+            return;
+        }
+
+        // --- 配置项 ---
+        this.config = {
+            rowHeight: options.rowHeight || 30,           // 行高
+            headerHeight: options.headerHeight || 35,      // 表头高度
+            defaultColWidth: options.defaultColWidth || 100, // 默认列宽
+            colWidths: options.colWidths || [],           // 各列宽度数组，优先级更高
+            bufferRows: options.bufferRows || 5,          // 垂直滚动缓冲区行数
+            bufferCols: options.bufferCols || 2,          // 水平滚动缓冲区列数
+            headerSticky: options.headerSticky !== false,  // 表头是否固定 (默认true)
+            headerColor: options.headerColor || '#f0f0f0', // 表头背景色
+            headerTextColor: options.headerTextColor || '#333', // 表头文字颜色
+            textColor: options.textColor || '#555',       // 单元格文字颜色
+            gridColor: options.gridColor || '#e0e0e0',    // 网格线颜色
+            font: options.font || '14px Arial',           // 字体
+        };
+
+        // --- 状态 ---
+        this.data = options.data || []; // 表格数据 (二维数组或对象数组)
+        this.columns = options.columns || []; // 列定义 (例如 { key: 'id', name: 'ID' })
+        this.totalRows = this.data.length;
+        this.totalCols = this.columns.length > 0 ? this.columns.length : (this.data[0] ? (Array.isArray(this.data[0]) ? this.data[0].length : Object.keys(this.data[0]).length) : 0);
+
+        this.scrollTop = 0;
+        this.scrollLeft = 0;
+        this.viewportWidth = 0;
+        this.viewportHeight = 0;
+
+        // --- 预计算 ---
+        this.precalculatedColWidths = this._calculateColWidths();
+        this.totalContentWidth = this.precalculatedColWidths.reduce((sum, w) => sum + w, 0);
+        this.totalContentHeight = this.totalRows * this.config.rowHeight + (this.config.headerSticky ? this.config.headerHeight : 0);
+
+        this._setupDimensions();
+        this._bindEvents();
+
+        // 初始渲染
+        this.render();
+    }
+
+    // --- 内部方法 ---
+
+    _calculateColWidths() {
+        const widths = [];
+        for (let i = 0; i < this.totalCols; i++) {
+            widths.push(this.config.colWidths[i] || this.config.defaultColWidth);
+        }
+        return widths;
+    }
+
+    _setupDimensions() {
+        // 获取容器的实际可用尺寸
+        this.viewportWidth = this.container.clientWidth;
+        this.viewportHeight = this.container.clientHeight;
+
+        // 设置 Canvas 的物理（绘制）尺寸和逻辑尺寸
+        this.canvas.width = this.viewportWidth * window.devicePixelRatio;
+        this.canvas.height = this.viewportHeight * window.devicePixelRatio;
+        this.canvas.style.width = `${this.viewportWidth}px`;
+        this.canvas.style.height = `${this.viewportHeight}px`;
+
+        // 应用缩放，使得绘图坐标与 CSS 像素一致
+        this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+        // 设置 sizer 的尺寸来驱动滚动条
+        this.sizer.style.width = `${this.totalContentWidth}px`;
+        // 如果表头固定，滚动区域的高度不包含表头
+        const scrollableHeight = this.config.headerSticky
+            ? this.totalRows * this.config.rowHeight
+            : this.totalContentHeight;
+        this.sizer.style.height = `${scrollableHeight}px`;
+
+        // 如果表头固定，Canvas 需要向下偏移表头高度
+        if (this.config.headerSticky) {
+            // 注意：这里不直接移动 canvas，而是在绘制时考虑偏移
+             this.canvas.style.position = 'sticky'; // 让canvas粘性定位
+             this.canvas.style.top = '0';
+             this.canvas.style.left = '0';
+             // 容器需要 padding-top 来为 sticky header 留出空间
+             this.container.style.paddingTop = `${this.config.headerHeight}px`;
+             // Sizer 也需要向下移动
+             this.sizer.style.top = `${this.config.headerHeight}px`;
+             // 调整可滚动高度计算逻辑（已在上面完成）
+             this.totalContentHeight = scrollableHeight; // 更新 totalContentHeight 以反映实际滚动范围
+        } else {
+             this.container.style.paddingTop = '0';
+             this.sizer.style.top = '0';
+        }
+    }
+
+    _bindEvents() {
+        this.container.addEventListener('scroll', this._handleScroll);
+        window.addEventListener('resize', this._handleResize);
+    }
+
+    _unbindEvents() {
+        this.container.removeEventListener('scroll', this._handleScroll);
+        window.removeEventListener('resize', this._handleResize);
+    }
+
+    _handleScroll = (e) => {
+        // 如果表头固定，容器的 scrollTop 对应的是数据区域的滚动
+        this.scrollTop = this.container.scrollTop;
+        this.scrollLeft = this.container.scrollLeft;
+        // 请求下一帧渲染
+        requestAnimationFrame(this.render);
+    };
+
+    _handleResize = () => {
+        this._setupDimensions();
+        // 请求下一帧渲染
+        requestAnimationFrame(this.render);
+    };
+
+    _getColumnLeft(colIndex) {
+        let left = 0;
+        for (let i = 0; i < colIndex; i++) {
+            left += this.precalculatedColWidths[i];
+        }
+        return left;
+    }
+
+    // --- 核心渲染方法 ---
+    render = () => { // 使用箭头函数确保 this 指向正确
+        this.ctx.save(); // 保存当前绘图状态
+
+        // 清除画布
+        this.ctx.clearRect(0, 0, this.canvas.width / window.devicePixelRatio, this.canvas.height / window.devicePixelRatio);
+
+        // 设置通用样式
+        this.ctx.font = this.config.font;
+        this.ctx.lineWidth = 1; // 网格线宽度
+
+        // --- 计算可见范围 ---
+        const dataScrollTop = this.config.headerSticky ? this.scrollTop : this.scrollTop - this.config.headerHeight;
+        const firstVisibleRow = Math.max(0, Math.floor(dataScrollTop / this.config.rowHeight));
+        const lastVisibleRow = Math.min(this.totalRows - 1, Math.ceil((dataScrollTop + this.viewportHeight) / this.config.rowHeight));
+
+        const firstVisibleCol = this._findFirstVisibleCol(this.scrollLeft);
+        const lastVisibleCol = this._findLastVisibleCol(this.scrollLeft, firstVisibleCol);
+
+        // 添加缓冲区
+        const startRow = Math.max(0, firstVisibleRow - this.config.bufferRows);
+        const endRow = Math.min(this.totalRows - 1, lastVisibleRow + this.config.bufferRows);
+        const startCol = Math.max(0, firstVisibleCol - this.config.bufferCols);
+        const endCol = Math.min(this.totalCols - 1, lastVisibleCol + this.config.bufferCols);
+
+        const headerY = 0; // 固定表头 Y 坐标
+        const dataStartY = this.config.headerSticky ? 0 : this.config.headerHeight; // 数据区域开始的 Y 坐标（相对于 Canvas）
+
+        // --- 1. 绘制表头 ---
+        this.ctx.fillStyle = this.config.headerColor;
+        this.ctx.fillRect(0, headerY, this.viewportWidth, this.config.headerHeight);
+        this.ctx.strokeStyle = this.config.gridColor;
+        this.ctx.fillStyle = this.config.headerTextColor;
+        this.ctx.textBaseline = 'middle';
+
+        let currentX = 0;
+        for (let j = startCol; j <= endCol; j++) {
+            const colWidth = this.precalculatedColWidths[j];
+            const colLeft = this._getColumnLeft(j);
+            const renderX = colLeft - this.scrollLeft; // 相对于视口的 X
+
+            // 只绘制视口内的列
+            if (renderX + colWidth > 0 && renderX < this.viewportWidth) {
+                // 绘制表头背景和边框
+                this.ctx.beginPath();
+                this.ctx.rect(renderX, headerY, colWidth, this.config.headerHeight);
+                this.ctx.stroke();
+
+                // 绘制表头文字 (居中)
+                const colDef = this.columns[j] || { name: `Column ${j + 1}` };
+                const text = colDef.name;
+                this.ctx.textAlign = 'center';
+                // 防止文字溢出
+                this.ctx.save();
+                this.ctx.clip(); // 限制绘制在当前单元格内
+                this.ctx.fillText(text, renderX + colWidth / 2, headerY + this.config.headerHeight / 2);
+                this.ctx.restore();
+            }
+            // 优化：如果当前列已经完全超出视口右侧，停止绘制后续列头
+            if (renderX >= this.viewportWidth) break;
+        }
+        // 画表头底部分隔线
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, headerY + this.config.headerHeight - 0.5); // -0.5 修正线条位置
+        this.ctx.lineTo(this.viewportWidth, headerY + this.config.headerHeight - 0.5);
+        this.ctx.stroke();
+
+
+        // --- 2. 绘制数据单元格 ---
+        this.ctx.strokeStyle = this.config.gridColor;
+        this.ctx.fillStyle = this.config.textColor;
+        this.ctx.textAlign = 'left'; // 通常数据左对齐
+
+        for (let i = startRow; i <= endRow; i++) {
+            const rowData = this.data[i];
+            if (!rowData) continue; // 跳过无效行
+
+            // 计算行的 Y 坐标（相对于 Canvas）
+            // 如果表头固定，数据绘制区域从0开始；否则从 headerHeight 开始
+            // 然后减去滚动偏移 scrollTop
+            const rowY = (i * this.config.rowHeight) - dataScrollTop + (this.config.headerSticky ? 0 : this.config.headerHeight);
+
+
+            // 只绘制视口内的行
+            if (rowY + this.config.rowHeight > (this.config.headerSticky ? 0 : this.config.headerHeight) && rowY < this.viewportHeight) {
+
+                 // 优化: 只绘制可视区域的行线 (可选)
+                 this.ctx.beginPath();
+                 this.ctx.moveTo(0, rowY + this.config.rowHeight - 0.5);
+                 this.ctx.lineTo(this.viewportWidth, rowY + this.config.rowHeight - 0.5);
+                 this.ctx.stroke();
+
+                for (let j = startCol; j <= endCol; j++) {
+                    const colWidth = this.precalculatedColWidths[j];
+                    const colLeft = this._getColumnLeft(j);
+                    const renderX = colLeft - this.scrollLeft; // 相对于视口的 X
+
+                    // 只绘制视口内的列单元格
+                    if (renderX + colWidth > 0 && renderX < this.viewportWidth) {
+                        const cellValue = this._getCellValue(rowData, j);
+
+                        // 绘制单元格文本 (添加一点 padding)
+                        const textPadding = 5;
+                        this.ctx.save();
+                         // 裁剪区域防止文字溢出到邻近单元格
+                        this.ctx.beginPath();
+                        this.ctx.rect(renderX, rowY, colWidth, this.config.rowHeight);
+                        this.ctx.clip();
+                        this.ctx.fillText(cellValue, renderX + textPadding, rowY + this.config.rowHeight / 2); // 垂直居中
+                        this.ctx.restore();
+
+                        // 优化: 只绘制可视区域的列线 (可选)
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(renderX + colWidth - 0.5, rowY);
+                        this.ctx.lineTo(renderX + colWidth - 0.5, rowY + this.config.rowHeight);
+                        this.ctx.stroke();
+                    }
+                     // 优化：如果当前列已经完全超出视口右侧，停止绘制本行后续单元格
+                    if (renderX >= this.viewportWidth) break;
+                }
+            }
+             // 优化：如果当前行已经完全低于视口底部，停止绘制后续行
+             if (rowY >= this.viewportHeight) break;
+        }
+
+
+        // --- 恢复绘图状态 ---
+        this.ctx.restore();
+    };
+
+
+     _findFirstVisibleCol(scrollLeft) {
+        let currentLeft = 0;
+        for(let i=0; i < this.totalCols; i++) {
+            if (currentLeft + this.precalculatedColWidths[i] > scrollLeft) {
+                return i;
+            }
+            currentLeft += this.precalculatedColWidths[i];
+        }
+        return 0; // 如果滚动超过了，也返回最后一列？或者0？看具体需求
+    }
+
+    _findLastVisibleCol(scrollLeft, firstVisibleCol) {
+        let currentLeft = this._getColumnLeft(firstVisibleCol);
+        const visibleWidth = scrollLeft + this.viewportWidth;
+        for(let i = firstVisibleCol; i < this.totalCols; i++) {
+             currentLeft += this.precalculatedColWidths[i];
+            if (currentLeft > visibleWidth) {
+                return i;
+            }
+        }
+        return this.totalCols - 1; // 如果没找到，说明直到最后一列都可见
+    }
+
+    _getCellValue(rowData, colIndex) {
+        if (Array.isArray(rowData)) {
+            return rowData[colIndex] !== undefined ? rowData[colIndex] : '';
+        } else if (typeof rowData === 'object' && rowData !== null) {
+            const key = this.columns[colIndex]?.key;
+            return key && rowData[key] !== undefined ? rowData[key] : '';
+        }
+        return '';
+    }
+
+    // --- 公共 API ---
+    setData(data, columns) {
+        this.data = data || [];
+        this.columns = columns || [];
+        this.totalRows = this.data.length;
+        this.totalCols = this.columns.length > 0 ? this.columns.length : (this.data[0] ? (Array.isArray(this.data[0]) ? this.data[0].length : Object.keys(this.data[0]).length) : 0);
+
+        // 重新计算
+        this.precalculatedColWidths = this._calculateColWidths();
+        this.totalContentWidth = this.precalculatedColWidths.reduce((sum, w) => sum + w, 0);
+        this.totalContentHeight = this.totalRows * this.config.rowHeight + (this.config.headerSticky ? this.config.headerHeight : 0);
+
+        // 重置滚动位置并重新设置尺寸
+        this.container.scrollTop = 0;
+        this.container.scrollLeft = 0;
+        this.scrollTop = 0;
+        this.scrollLeft = 0;
+        this._setupDimensions(); // Sizer 尺寸会更新
+
+        // 渲染
+        requestAnimationFrame(this.render);
+    }
+
+    destroy() {
+        this._unbindEvents();
+        // 清理其他资源（如果需要）
+        console.log("VirtualTable destroyed.");
+    }
+}
+
+// --- 模拟海量数据 ---
+function generateData(rows, cols) {
+    const data = [];
+    const columns = [];
+    for (let j = 0; j < cols; j++) {
+        columns.push({ key: `col${j}`, name: `Column ${j + 1}` });
+    }
+    for (let i = 0; i < rows; i++) {
+        const row = {};
+        for (let j = 0; j < cols; j++) {
+            row[`col${j}`] = `Row ${i + 1} - Col ${j + 1}`;
+        }
+        data.push(row);
+    }
+    return { data, columns };
+}
+
+// --- 初始化表格 ---
+const numRows = 100000; // 10 万行
+const numCols = 50;    // 50 列
+const { data, columns } = generateData(numRows, numCols);
+
+// 自定义列宽 (可选)
+const customColWidths = [];
+for(let i=0; i< numCols; i++) {
+    customColWidths.push(80 + Math.floor(Math.random() * 120)); // 随机宽度 80-200
+}
+
+
+const table = new VirtualTable('table-container', 'table-canvas', {
+    data: data,
+    columns: columns,
+    rowHeight: 28,
+    headerHeight: 32,
+    // defaultColWidth: 150, // 如果不提供 colWidths，则使用这个
+    colWidths: customColWidths,
+    bufferRows: 10, // 增加缓冲区使滚动更平滑
+    bufferCols: 3,
+    headerSticky: true, // 启用固定表头
+    font: '13px Segoe UI, Arial, sans-serif',
+    gridColor: '#ddd',
+    headerColor: '#e9ecef',
+    headerTextColor: '#495057'
+});
+
+// 可以在之后更新数据
+// setTimeout(() => {
+//     console.log("Updating data...");
+//     const { data: newData, columns: newColumns } = generateData(500, 10);
+//     table.setData(newData, newColumns);
+// }, 5000);
+
+// 清理 (例如在页面卸载或组件销毁时)
+window.addEventListener('beforeunload', () => {
+    table.destroy();
+});
+
+</script>
+
+</body>
+</html>
