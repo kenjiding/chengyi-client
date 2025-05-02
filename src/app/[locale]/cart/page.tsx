@@ -112,11 +112,11 @@ export default function CartPage() {
                       </div>
                       <div className="flex-1 min-w-0 max-w-full">
                         <div className="flex justify-between items-start mb-1 sm:mb-2">
-                        <Link
-                          href={`/products/${item.product.id}`}
-                          className="text-sm sm:text-lg font-semibold hover:text-blue-600 transition-colors truncate max-w-40 sm:max-w-full">
-                          {item.product.name || 'Unknown Product'}
-                        </Link>
+                          <Link
+                            href={`/products/${item.product.id}`}
+                            className="text-sm sm:text-lg font-semibold hover:text-blue-600 transition-colors truncate max-w-48 sm:max-w-full">
+                            {item.product.name || 'Unknown Product'}
+                          </Link>
                           <button
                             onClick={() => removeFromCart(item.product.id)}
                             className="ml-2 text-gray-400 hover:text-red-600 transition-colors flex-shrink-0"

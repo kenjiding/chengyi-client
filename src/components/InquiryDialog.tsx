@@ -184,7 +184,7 @@ export function InquiryDialog({ products }: { products: CartItem[] }) {
                       />
                     </div>
                     <div className="flex-grow">
-                      <h4 className="font-medium text-gray-800 text-sm sm:text-base truncate">
+                      <h4 className="font-medium text-gray-800 text-sm sm:text-base truncate overflow-hidden whitespace-nowrap max-w-40 sm:max-w-full">
                         {item.product.name}
                       </h4>
                       <p className="text-xs sm:text-sm text-gray-500">
