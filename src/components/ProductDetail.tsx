@@ -7,6 +7,7 @@ import AddToCartButton from '@/components/AddToCartButton';
 import ProductCard from '@/components/ProductCard';
 import { Link } from '@/i18n/routing';
 import { IProduct } from '@/types';
+import { formatPrice } from '@/lib/utils';
 
 export default function ProductDetail({ 
   product, 
@@ -107,7 +108,7 @@ export default function ProductDetail({
               <p className="text-gray-600">{product.description}</p>
               {
                 Number(product.price) > 0 && <div className='mt-5'>
-                  <span className="text-2xl font-semibold text-green-700">${product.price}</span>
+                  <span className="text-2xl font-semibold text-green-700">{formatPrice(product.price, locale)}</span>
                   {product.stock && (
                     <span className="ml-2 text-red-600">{product.stock}</span>
                   )}

@@ -1,3 +1,4 @@
+import { LOCALE_ZH } from "@/i18n/config";
 import { AnalyticeEvents } from "@/types/analytics";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
@@ -21,4 +22,12 @@ export function formatDate(dateString: string) {
 
 export function pushGoogleAnalyticsEvent(type: AnalyticeEvents, data: any) {
   if (window.gtag) window.gtag('event', type, data);
+}
+
+export const formatPrice = (price: number, locale: string) => {
+  if(locale === LOCALE_ZH) {
+    return `￥ ${price}`;
+  } else {
+    return `$ ${Math.ceil(price / 7)}`;
+  }
 }

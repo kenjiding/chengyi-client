@@ -8,10 +8,11 @@ const nextConfig = {
     ignoreBuildErrors: true
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '*',
+        hostname: 'chengyi-upload-files.s3.eu-central-1.amazonaws.com',
         pathname: '/**',
       },
     ],

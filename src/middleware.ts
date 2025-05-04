@@ -4,16 +4,10 @@ import createIntlMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 import { createResponse } from '@/lib/response';
 import { verifyToken } from '@/lib/jwt';
+import { getWhitelist } from '@/configs/api_whitelist';
 
 const PRE_PATH = '/api/admin';
-
-const whitelist = [
-  '/login',
-  '/register',
-  '/inquiry',
-  '/news',
-  '/categories-tree',
-];
+const whitelist = getWhitelist();
 
 const intlMiddleware = createIntlMiddleware(routing);
 

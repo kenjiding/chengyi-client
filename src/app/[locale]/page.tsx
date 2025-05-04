@@ -21,9 +21,7 @@ export default async function Home() {
         <Banner data={banners} />
       </Suspense>
       <div className="container mx-auto py-12 space-y-24">
-        <Suspense fallback={<DynamicLoadingComponent text='Loading Products...'></DynamicLoadingComponent>}>
-          <FeaturedProducts />
-        </Suspense>
+        <FeaturedProducts />
         <Suspense fallback={<DynamicLoadingComponent text='Loading Speciel Products...'></DynamicLoadingComponent>}>
           <FeaturedProducts showPrice title='specielTitle' subtitle='specielSubTitle' />
         </Suspense>

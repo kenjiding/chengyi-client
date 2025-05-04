@@ -5,8 +5,11 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import AddToCartButton from '../AddToCartButton';
 import type { IProduct } from '@/types';
 import { Link } from '@/i18n/routing';
+import { formatPrice } from '@/lib/utils';
+import { useLocale } from 'next-intl';
 
 export default function ProductCard({ product, showPrice }: { product: IProduct, showPrice?: boolean }) {
+  const locale = useLocale();
   const [isHovered, setIsHovered] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -92,7 +95,7 @@ export default function ProductCard({ product, showPrice }: { product: IProduct,
         { showPrice && 
           <div className='flex justify-between my-2 sm:my-2'>
             <span className="text-md sm:text-lg font-semibold text-green-600">
-              ${product.price}
+              {formatPrice(product.price, locale)}
             </span>
             {product.stock && (
               <span className="ml-2 text-red-600">

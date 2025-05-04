@@ -9,6 +9,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Slide } from '@/types';
 
+export const dynamic = 'force-static'; // 强制静态生成
+
 function SlideMedia({ slide, index, isSelected }: {
   slide: Slide;
   index: number;

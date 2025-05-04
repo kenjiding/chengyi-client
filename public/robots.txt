@@ -1,0 +1,34 @@
+# *
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /products
+Allow: /products/*
+Allow: /categories
+Allow: /categories/*
+Disallow: /admin
+Disallow: /login
+Disallow: /cart
+Disallow: /checkout
+Disallow: /api/*
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+
+# Baiduspider
+User-agent: Baiduspider
+Allow: /
+Allow: /products
+Allow: /products/*
+Allow: /categories
+Allow: /categories/*
+Disallow: /admin
+Disallow: /login
+Disallow: /cart
+Disallow: /checkout
+Disallow: /api/*
+
+# Host
+Host: https://www.chengyiauto.com
+
+# Sitemaps
+Sitemap: https://www.chengyiauto.com/sitemap.xml

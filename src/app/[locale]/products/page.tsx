@@ -9,7 +9,8 @@ export const generateMetadata = async ({
 }: {
   searchParams: Record<string, string>;
 }) => {
-  const { brandId, mainCategoryId, subCategoryId } = searchParams;
+  const tempSearchParams = await searchParams;
+  const { brandId, mainCategoryId, subCategoryId } = tempSearchParams;
 
   const title = `Products${brandId ? ` - Brand ${brandId}` : ''}`;
   const description = `Browse our selection of ${

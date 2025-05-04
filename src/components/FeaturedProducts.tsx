@@ -2,6 +2,9 @@ import ProductCard from './ProductCard/ClientProductCard';
 import { getTranslations } from 'next-intl/server';
 import { getProducts } from '@/app/api/admin/products/service';
 
+export const dynamic = 'force-static'; // 强制静态生成
+export const revalidate = 60 * 60 * 24;        // 可选，用于 ISR
+
 const getProductsHandle = async () => {
   const products = await getProducts({
     page: 1,

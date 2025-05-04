@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import ProductCard from '@/components/ProductCard/ClientProductCard';
 import { IProduct } from '@/types';
@@ -37,6 +37,7 @@ export default function ProductList({
   subCategoryId
 }: ProductListProps) {
   const router = useRouter();
+  const query = useSearchParams();
   const [loadedProducts, setLoadedProducts] = useState(products);
   const { loading, changeProductsLoading } = productStore();
 
@@ -48,12 +49,20 @@ export default function ProductList({
 
   const handlePageChange = (newPage: number) => {
     changeProductsLoading(true);
-    const searchParams = new URLSearchParams();
+    const searchParams = new URLSearchParams(query);
     searchParams.set('page', newPage.toString());
     searchParams.set('pageSize', pageSize.toString());
     if (subCategoryId) searchParams.set('subCategoryId', subCategoryId);
     router.push(`/products?${searchParams.toString()}`);
   };
+
+  const formatPageHref = (page: number) => {
+    const searchParams = new URLSearchParams(query);
+    searchParams.set('page', page.toString());
+    searchParams.set('pageSize', pageSize.toString());
+    if (subCategoryId) searchParams.set('subCategoryId', subCategoryId);
+    return `/products?${searchParams.toString()}`;
+  }
 
   // 添加路由变化监听
   useEffect(() => {
@@ -88,7 +97,7 @@ export default function ProductList({
     if (startPage > 1) {
       items.push(
         <PaginationItem key="first">
-          <PaginationLink onClick={() => handlePageChange(1)}>1</PaginationLink>
+          <PaginationLink href={formatPageHref(1)}>1</PaginationLink>
         </PaginationItem>
       );
       if (startPage > 2) {
@@ -104,7 +113,7 @@ export default function ProductList({
       items.push(
         <PaginationItem key={i}>
           <PaginationLink
-            onClick={() => handlePageChange(i)}
+            href={formatPageHref(i)}
             isActive={i === currentPage}
           >
             {i}
@@ -123,7 +132,7 @@ export default function ProductList({
       }
       items.push(
         <PaginationItem key="last">
-          <PaginationLink onClick={() => handlePageChange(pagination.totalPages)}>
+          <PaginationLink href={formatPageHref(pagination.totalPages)}>
             {pagination.totalPages}
           </PaginationLink>
         </PaginationItem>
