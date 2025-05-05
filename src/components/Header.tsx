@@ -9,6 +9,7 @@ import LanguageSwitcher from './LanguageSwitcher';
 import { cartStore } from '@/store/cartStore';
 import { CartItem } from '@/types';
 import Image from 'next/image';
+import { Folder, Package, Newspaper, Info } from 'lucide-react';
 
 export default function Header() {
   const { cart } = cartStore();
@@ -17,7 +18,6 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { scrollY } = useScroll();
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -44,10 +44,10 @@ export default function Header() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Navigate to search results page
       router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
       searchInputRef.current?.blur();
+      setIsMobileMenuOpen(false);
     }
   };
 
@@ -75,7 +75,6 @@ export default function Header() {
       className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md transition-colors duration-200 w-full
                 ${isScrolled ? 'bg-white' : 'bg-white/90'}`}
       style={{
-        opacity: headerOpacity,
         boxShadow: headerShadow,
       }}
     >
@@ -111,8 +110,6 @@ export default function Header() {
                     placeholder={t('search')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    onFocus={() => setIsSearchFocused(true)}
-                    onBlur={() => setIsSearchFocused(false)}
                     className="w-48 outline-none bg-transparent text-sm placeholder-gray-400"
                   />
                   {searchQuery && (
@@ -173,68 +170,93 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}<AnimatePresence>
+        {/* Mobile Navigation */}
+        <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden overflow-hidden"
+              className="md:hidden overflow-hidden bg-white shadow-lg rounded-xl mt-2"
             >
-              <div className="py-4 mt-2 space-y-1 border-t border-gray-100">
+              <div className="py-4 px-4 space-y-2 border-t border-gray-100">
                 {/* Search for Mobile */}
-                <form onSubmit={handleSearch} className="px-4 mb-2">
-                  {/* ... (search input code remains unchanged) ... */}
+                <form onSubmit={handleSearch} className="relative mb-4">
+                  <div className="flex items-center bg-blue-50 border border-blue-200 rounded-xl px-4 py-2 shadow-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-blue-300">
+                    <Search className="w-5 h-5 text-blue-400 mr-3" />
+                    <input
+                      ref={searchInputRef}
+                      type="text"
+                      placeholder={t('search')}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full outline-none bg-transparent text-base placeholder-blue-300"
+                    />
+                    {searchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => setSearchQuery('')}
+                        className="ml-3 text-blue-400 hover:text-blue-600 transition-colors"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
                 </form>
                 <Link
                   href="/cart"
-                  className={`block px-4 py-2 rounded-lg transition-colors text-center
-            ${pathname === '/cart'
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-gray-700 hover:bg-gray-50'}`}
+                  className={`flex items-start px-4 py-3 rounded-lg transition-colors text-left font-semibold
+                    ${pathname === '/cart'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-blue-700 hover:bg-blue-50'}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
+                  <ShoppingCart className="w-5 h-5 mr-3" />
                   {t('cart')}
                 </Link>
                 <Link
                   href="/categories"
-                  className={`block px-4 py-2 rounded-lg transition-colors text-center
-            ${pathname === '/categories'
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-gray-700 hover:bg-gray-50'}`}
+                  className={`flex items-start px-4 py-3 rounded-lg transition-colors text-left font-semibold
+                    ${pathname === '/categories'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-blue-700 hover:bg-blue-50'}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
+                  <Folder className="w-5 h-5 mr-3" />
                   {t('categories')}
                 </Link>
                 <Link
                   href="/products"
-                  className={`block px-4 py-2 rounded-lg transition-colors text-center
-            ${pathname === '/products'
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-gray-700 hover:bg-gray-50'}`}
+                  className={`flex items-start px-4 py-3 rounded-lg transition-colors text-left font-semibold
+                    ${pathname === '/products'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-blue-700 hover:bg-blue-50'}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
+                  <Package className="w-5 h-5 mr-3" />
                   {t('products')}
                 </Link>
                 <Link
                   href="/news"
-                  className={`block px-4 py-2 rounded-lg transition-colors text-center
-            ${pathname === '/news'
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-gray-700 hover:bg-gray-50'}`}
+                  className={`flex items-start px-4 py-3 rounded-lg transition-colors text-left font-semibold
+                    ${pathname === '/news'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-blue-700 hover:bg-blue-50'}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
+                  <Newspaper className="w-5 h-5 mr-3" />
                   {t('news')}
                 </Link>
                 <Link
                   href="/about"
-                  className={`block px-4 py-2 rounded-lg transition-colors text-center
-            ${pathname === '/about'
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-gray-700 hover:bg-gray-50'}`}
+                  className={`flex items-start px-4 py-3 rounded-lg transition-colors text-left font-semibold
+                    ${pathname === '/about'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-blue-700 hover:bg-blue-50'}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
+                  <Info className="w-5 h-5 mr-3" />
                   {t('about')}
                 </Link>
               </div>

@@ -29,6 +29,7 @@ export const products = pgTable('products', {
   description: text('description'),
   features: text('features'),
   price: decimal('price', { precision: 10, scale: 2 }),
+  // stock: decimal('stock'),
   images: jsonb('images'),
   special: boolean('special').default(false),
   createdAt: timestamp('created_at').defaultNow(),

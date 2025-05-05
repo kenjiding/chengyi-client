@@ -28,6 +28,9 @@ export default async function FeaturedProducts({
   const titleText = title === 'title' ? t('title') : t('specielTitle');
   const subtitleText = subtitle === 'subtitle' ? t('subtitle') : t('specielSubtitle');
   const produtsData = products?.filter((item) => {
+    const options = [8, 8.5, 9, 9.5];
+    const randomValue = options[Math.floor(Math.random() * options.length)];
+    item.score = randomValue;
     if(title === 'title') {
       return !item.special;
     } else {

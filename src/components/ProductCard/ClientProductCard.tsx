@@ -7,6 +7,7 @@ import type { IProduct } from '@/types';
 import { Link } from '@/i18n/routing';
 import { formatPrice } from '@/lib/utils';
 import { useLocale } from 'next-intl';
+import RatingDisplay from '../RatingDisplay';
 
 export default function ProductCard({ product, showPrice }: { product: IProduct, showPrice?: boolean }) {
   const locale = useLocale();
@@ -80,20 +81,26 @@ export default function ProductCard({ product, showPrice }: { product: IProduct,
 
       <div className="p-4 sm:p-6">
         <Link href={`/products/${product.id}`} className="block">
-        <h3
-          className={`text-lg sm:text-lg font-semibold mb-1 sm:mb-2 transition-colors duration-300 ease-in-out
-            ${isHovered ? 'text-blue-600' : 'text-gray-900'} 
-            line-clamp-2`}
-        >
-          {product.name}
-        </h3>
-
+          <h3
+            className={`text-sm sm:text-sm font-semibold mb-1 sm:mb-2 transition-colors duration-300 ease-in-out
+              ${isHovered ? 'text-blue-600' : 'text-gray-900'} 
+              line-clamp-2`}
+          >
+            {product.name}
+          </h3>
         </Link>
-        <p className={`text-gray-600 text-sm sm:text-base line-clamp-2 ${!showPrice ? 'mb-3' : ''}`}>
-          {product.description}
-        </p>
-        { showPrice && 
-          <div className='flex justify-between my-2 sm:my-2'>
+
+        { 
+          product.description && 
+          <p className={`text-gray-600 text-xs line-clamp-2 ${!showPrice ? 'mb-3' : ''}`}>
+            {product.description}
+          </p>
+        }
+        {/* Recommendation Index using RatingDisplay */}
+        <RatingDisplay score={product.score || 8} />
+
+        {showPrice && (
+          <div className="flex justify-between my-2 sm:my-2">
             <span className="text-md sm:text-lg font-semibold text-green-600">
               {formatPrice(product.price, locale)}
             </span>
@@ -103,7 +110,8 @@ export default function ProductCard({ product, showPrice }: { product: IProduct,
               </span>
             )}
           </div>
-        }
+        )}
+
         <div className="flex items-center justify-center">
           <AddToCartButton product={product} />
         </div>

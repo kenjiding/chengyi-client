@@ -52,7 +52,7 @@ function EmptyCart({ t }: { t: any }) {
 export default function CartPage() {
   const [isClient, setIsClient] = useState(false);
   const t = useTranslations('cart');
-  const { cart, removeFromCart, updateQuantity, clearCart } = cartStore();
+  const { cart, reduceFromCart, updateQuantity, clearCart } = cartStore();
 
   // 客户端挂载检查
   useEffect(() => {
@@ -118,7 +118,7 @@ export default function CartPage() {
                             {item.product.name || 'Unknown Product'}
                           </Link>
                           <button
-                            onClick={() => removeFromCart(item.product.id)}
+                            onClick={() => reduceFromCart(item.product.id)}
                             className="ml-2 text-gray-400 hover:text-red-600 transition-colors flex-shrink-0"
                           >
                             <svg className="w-4 sm:w-5 h-4 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -132,7 +132,7 @@ export default function CartPage() {
                           <div className="flex items-center border rounded-lg">
                             <button
                               onClick={() => updateQuantity(item.product.id, Math.max(1, item.quantity - 1))}
-                              className="px-1 sm:px-3 py-1 hover:bg-gray-100"
+                              className="inline-flex items-center justify-center px-1 w-7 h-7 sm:w-9 sm:h-9 sm:px-3 py-1 hover:bg-gray-100"
                             >
                               -
                             </button>
@@ -145,7 +145,7 @@ export default function CartPage() {
                             />
                             <button
                               onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                              className="px-1 sm:px-3 py-1 hover:bg-gray-100"
+                              className="inline-flex items-center justify-center px-1 w-7 h-7 sm:w-9 sm:h-9 sm:px-3 py-1 hover:bg-gray-100"
                             >
                               +
                             </button>

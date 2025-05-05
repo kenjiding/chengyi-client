@@ -47,7 +47,8 @@ export default function ProductList({
     changeProductsLoading(false);
   }, [products]);
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = (newPage: number, e?: any) => {
+    if(e) e.preventDefault();
     changeProductsLoading(true);
     const searchParams = new URLSearchParams(query);
     searchParams.set('page', newPage.toString());
@@ -97,7 +98,7 @@ export default function ProductList({
     if (startPage > 1) {
       items.push(
         <PaginationItem key="first">
-          <PaginationLink href={formatPageHref(1)}>1</PaginationLink>
+          <PaginationLink href={formatPageHref(1)} onClick={(e) => handlePageChange(1, e)}>1</PaginationLink>
         </PaginationItem>
       );
       if (startPage > 2) {
@@ -114,6 +115,7 @@ export default function ProductList({
         <PaginationItem key={i}>
           <PaginationLink
             href={formatPageHref(i)}
+            onClick={(e) => handlePageChange(i, e)}
             isActive={i === currentPage}
           >
             {i}
@@ -132,7 +134,7 @@ export default function ProductList({
       }
       items.push(
         <PaginationItem key="last">
-          <PaginationLink href={formatPageHref(pagination.totalPages)}>
+          <PaginationLink href={formatPageHref(pagination.totalPages)} onClick={(e) => handlePageChange(pagination.totalPages, e)}>
             {pagination.totalPages}
           </PaginationLink>
         </PaginationItem>

@@ -8,8 +8,6 @@ import { pushGoogleAnalyticsEvent } from '@/lib/utils';
 import { AnalyticeEvents } from '@/types/analytics';
 import Request from '@/lib/request';
 import { productStore } from '@/store/productStore';
-import { Button } from '@/components/ui/button';
-
 interface Category {
   value: string;
   label: string;
@@ -97,6 +95,7 @@ export default function ClientCategoryMenu({
           onClick={() => {
             toggleCategory(category.value);
             handleCategoryClick(currentPath);
+            toggleMenu();
           }}
           className={`flex items-center text-left w-full py-3 px-4 transition duration-150 ease-in-out
                       hover:bg-gray-100 rounded-md

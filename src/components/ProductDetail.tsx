@@ -8,6 +8,7 @@ import ProductCard from '@/components/ProductCard';
 import { Link } from '@/i18n/routing';
 import { IProduct } from '@/types';
 import { formatPrice } from '@/lib/utils';
+import RatingDisplay from './RatingDisplay';
 
 export default function ProductDetail({ 
   product, 
@@ -22,19 +23,14 @@ export default function ProductDetail({
   const [selectedImage, setSelectedImage] = useState(0);
   const features = product.features?.split(',');
 
+  const handleBuyNow = () => {
+    // Add logic to handle "Buy Now" action, e.g., redirect to checkout
+    console.log(`Buying now: ${product.name}`);
+    // Example: router.push(`/checkout?productId=${product.id}`);
+  };
+
   return (
     <>
-      {/* <Head>
-        <title>{`${product.name} | chengyi`}</title>
-        <meta name="description" content={product.description.slice(0, 160)} /> 
-        <meta property="og:title" content={product.name} />
-        <meta property="og:description" content={product.description.slice(0, 160)} />
-        <meta property="og:image" content={product.images[0]} />
-        <meta property="og:type" content="product" />
-        <meta property="og:url" content={canonicalUrl} />
-        <link rel="canonical" href={canonicalUrl} />
-      </Head> */}
-
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": `https://chnegyiauto.com/${locale}/products/${product.id}`,
@@ -65,7 +61,7 @@ export default function ProductDetail({
           </span>
         </nav>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* 产品图片部分 */}
           <div className="space-y-6">
             <div className="relative h-96 bg-gray-100 rounded-xl overflow-hidden">
@@ -99,7 +95,7 @@ export default function ProductDetail({
           </div>
 
           {/* 产品信息部分 */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             <div>
               <h1 className="text-3xl font-bold mb-4 truncate max-w-full" style={{ maxWidth: '90vw' }}>
                 {product.name}
@@ -116,17 +112,43 @@ export default function ProductDetail({
               }
             </div>
 
-            <AddToCartButton product={product} />
+            {/* Recommendation Index */}
+            <RatingDisplay score={product.score || 8} />
+
+            <div className="flex gap-2 mt-4">
+              <div className="w-1/2 flex items-center">
+                <AddToCartButton product={product} />
+              </div>
+              <div className="w-1/2">
+                <button
+                  onClick={handleBuyNow}
+                  className="w-full h-9 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white rounded-md shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm font-semibold"
+                >
+                  {t('buyNow')}
+                </button>
+              </div>
+            </div>
 
             {/* 产品特点 */}
             {features && features.length > 0 && (
               <div className="border-t pt-8">
                 <h2 className="text-xl font-semibold mb-4">{t('features')}</h2>
-                <ul className="space-y-3 text-gray-600">
+                <ul className="flex flex-wrap text-gray-600 gap-x-6 gap-y-3">
                   {features?.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-blue-600 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <li key={index} className="flex items-start gap-2 w-[calc(50%-0.75rem)]">
+                      <svg
+                        className="w-5 h-5 text-blue-600 mt-0.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                       <span>{feature}</span>
                     </li>

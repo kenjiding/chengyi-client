@@ -55,7 +55,12 @@ export default async function ProductsPage({
     brandId: brandId ? brandId : undefined,
     special: special ? (typeof special === 'string' ? special : special[0]) : undefined ,
   });
-  const products = items;
+  const products = items.map((item) => {
+    const options = [8, 8.5, 9, 9.5];
+    const randomValue = options[Math.floor(Math.random() * options.length)];
+    item.score = randomValue;
+    return item;
+  });
   const expanded = resolvedSearchParams.expanded;
   const expandedCategories = new Set(
     Array.isArray(expanded) 

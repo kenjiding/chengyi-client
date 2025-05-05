@@ -145,7 +145,7 @@ export default function HeroCarousel({
                   <div className="container mx-auto px-10 sm:px-6 lg:px-8">
                     <div className="max-w-4xl sm:mx-32 mx-10 text-center">
                       {/* Semi-transparent overlay box with blur and shadow */}
-                      <div className="bg-black/30 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg">
+                      <div className="bg-black/30 p-4 sm:p-6 rounded-lg shadow-lg">
                         <h2 className="text-sm sm:text-base lg:text-lg text-yellow-300 font-semibold uppercase tracking-wider line-clamp-1">
                           {slide.subtitle}
                         </h2>
