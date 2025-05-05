@@ -10,7 +10,7 @@ interface CartItem {
 interface CartState {
   cart: CartItem[];
   addToCart: (product: IProduct, quantity?: number) => void;
-  reduceFromCart: (productId: string) => void;
+  removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
 }
@@ -39,19 +39,15 @@ export const cartStore = create<CartState>()(
           }));
         }
       },
-      reduceFromCart: (productId) =>
+      removeFromCart: (productId) =>
         set((state) => ({
-          cart: state.cart.map((item) =>
-            item.product.id === productId
-              ? { ...item, quantity: Math.max(0, item.quantity - 1) }
-              : item
-          ),
+          cart: state.cart.filter((item) => item.product.id !== productId),
         })),
       updateQuantity: (productId, quantity) =>
         set((state) => ({
           cart: state.cart.map((item) =>
             item.product.id === productId
-              ? { ...item, quantity: Math.max(0, quantity) }
+              ? { ...item, quantity: Math.max(1, quantity) }
               : item
           ),
         })),

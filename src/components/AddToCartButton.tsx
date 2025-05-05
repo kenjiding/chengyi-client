@@ -10,7 +10,7 @@ import { AnalyticeEvents } from "@/types/analytics";
 export default function AddToCartButton({ product }: { product: IProduct }) {
   const t = useTranslations("common");
   const [quantity, setQuantity] = useState(0);
-  const { cart, addToCart, reduceFromCart, updateQuantity } = cartStore();
+  const { cart, addToCart, removeFromCart, updateQuantity } = cartStore();
 
   // 在组件挂载时和购物车变化时，检查当前商品的数量
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function AddToCartButton({ product }: { product: IProduct }) {
     if (newQuantity < 0) return; // Prevent negative quantities
     updateQuantity(product.id, newQuantity);
     if (newQuantity === 0) {
-      reduceFromCart(product.id); // Reduce to 0, which will stay in cart with quantity 0
+      removeFromCart(product.id); // Reduce to 0, which will stay in cart with quantity 0
     }
     setQuantity(newQuantity);
   };
@@ -43,7 +43,7 @@ export default function AddToCartButton({ product }: { product: IProduct }) {
   const handleInputBlur = () => {
     const cartItem = cart.find((item) => item.product.id === product.id);
     if (cartItem && cartItem.quantity === 0) {
-      reduceFromCart(product.id); // Ensure cart reflects 0 quantity
+      removeFromCart(product.id); // Ensure cart reflects 0 quantity
     }
   };
 

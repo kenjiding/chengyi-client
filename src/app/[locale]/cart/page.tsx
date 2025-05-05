@@ -52,7 +52,7 @@ function EmptyCart({ t }: { t: any }) {
 export default function CartPage() {
   const [isClient, setIsClient] = useState(false);
   const t = useTranslations('cart');
-  const { cart, reduceFromCart, updateQuantity, clearCart } = cartStore();
+  const { cart, removeFromCart, updateQuantity, clearCart } = cartStore();
 
   // 客户端挂载检查
   useEffect(() => {
@@ -118,7 +118,7 @@ export default function CartPage() {
                             {item.product.name || 'Unknown Product'}
                           </Link>
                           <button
-                            onClick={() => reduceFromCart(item.product.id)}
+                            onClick={() => removeFromCart(item.product.id)}
                             className="ml-2 text-gray-400 hover:text-red-600 transition-colors flex-shrink-0"
                           >
                             <svg className="w-4 sm:w-5 h-4 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
